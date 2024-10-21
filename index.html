@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix Code Visualization</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrixCanvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById("matrixCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+        const fontSize = 16; // Size of the text
+        const columns = canvas.width / fontSize; // Number of columns in the canvas
+
+        // Create an array to hold the drop positions
+        const drops = Array.from({ length: columns }, () => 1);
+
+        function draw() {
+            // Create a translucent black background
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Set the text style
+            ctx.fillStyle = "#00ff00"; // Green color
+            ctx.font = `${fontSize}px monospace`;
+
+            // Draw the characters
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Reset drop position if it goes beyond the height of the canvas
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++; // Move the drop down
+            }
+        }
+
+        // Set an interval to call the draw function every 30 milliseconds
+        setInterval(draw, 30);
+    </script>
+</body>
+</html>
